@@ -22,7 +22,8 @@ import java.util.LinkedList;
 
 public class StartScreen extends Application{
 	final double RATIO = 0.6;
-	Scene game_screen = null, start_screen = null;
+	Scene game_screen = null, start_screen = null, about_screen = null;
+	Board board = null;
 	Cannon cannon;
 
 	public void start(Stage primaryStage){
@@ -32,6 +33,7 @@ public class StartScreen extends Application{
 		primaryStage.setHeight(1115 * RATIO);
 		primaryStage.setResizable(false);
 		setupStartMenu(primaryStage);
+		setupAboutScreen(primaryStage);
 
 		primaryStage.show();
 	}
@@ -46,12 +48,12 @@ public class StartScreen extends Application{
 		});
 		Button load_button = createButton("/Images/load.png");
 		load_button.setOnMouseClicked(e -> {
-			if(game_screen != null)
+			if(game_screen != null && board != null && board.getWin() == false)
 				primaryStage.setScene(game_screen);
 		});
 		Button about_button = createButton("/Images/about.png");
 		about_button.setOnMouseClicked(e -> {
-
+			primaryStage.setScene(about_screen);
 		});
 		Button quit_button = createButton("/Images/quit.png");
 		quit_button.setOnMouseClicked(e -> {
@@ -88,9 +90,37 @@ public class StartScreen extends Application{
 		save_button.relocate(1030 * RATIO, 850 * RATIO);
 		quit_button.relocate(1410 * RATIO, 850 * RATIO);
 		captured_pieces.relocate(990 * RATIO, 240 * RATIO);
-		Board board = new Board(pane);
+		board = new Board(pane, primaryStage, start_screen);
 		game_screen = new Scene(pane);
 		game_screen.getStylesheets().add("/css/start_menu.css");
+	}
+
+	public void setupAboutScreen(Stage primaryStage){
+		ImageView background = createImageView("/Images/main_menu.png", true);
+		ImageView aboutCC = createImageView("/Images/AboutCC.png");
+		ImageView aboutGeneral = createImageView("/Images/AboutGeneral.png");
+		ImageView aboutAdvisor = createImageView("/Images/AboutAdvisor.png");
+		ImageView aboutElephant = createImageView("/Images/AboutElephant.png");
+		ImageView aboutHorse = createImageView("/Images/AboutHorse.png");
+		ImageView aboutChariot = createImageView("/Images/AboutChariot.png");
+		ImageView aboutCannon = createImageView("/Images/AboutCannon.png");
+		ImageView aboutSoldier = createImageView("/Images/AboutSoldier.png");
+		Button close_button = createButton("/Images/Close.png");
+		close_button.setOnMouseClicked(e->{
+			primaryStage.setScene(start_screen);
+		});
+		Pane pane = new Pane();
+		pane.getChildren().addAll(background, aboutCC, aboutGeneral, aboutAdvisor, aboutElephant, aboutHorse, aboutChariot, aboutCannon, aboutSoldier, close_button);
+		aboutGeneral.relocate(0, 230 * RATIO);
+		aboutAdvisor.relocate(0, 348 * RATIO);
+		aboutElephant.relocate(0, 424 * RATIO);
+		aboutHorse.relocate(0, 540 * RATIO);
+		aboutChariot.relocate(0, 632 * RATIO);
+		aboutCannon.relocate(0, 720 * RATIO);
+		aboutSoldier.relocate(0, 826 * RATIO);
+		close_button.relocate(1600 * RATIO, 916 * RATIO);
+		about_screen = new Scene(pane);
+		about_screen.getStylesheets().add("/css/start_menu.css");
 	}
 
 	//===============================Helper Functions=======================================

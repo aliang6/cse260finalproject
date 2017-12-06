@@ -3,6 +3,8 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -10,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.MouseDragEvent;
+import javafx.scene.control.Button;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import java.util.Collection;
@@ -19,7 +22,7 @@ import java.util.HashMap;
 public class Board{
 	ImageView red_turn, black_turn, player_turn;
 	char turn = 'R';
-
+	boolean win = false;
 	StackPane[][] board;
 	Piece[][] dataBoard;
 	final double RATIO = 0.6;
@@ -33,8 +36,9 @@ public class Board{
 	Behavior behavior;
 	Captured captured_red_side, captured_black_side;
 	Side red_side, black_side;
+	Scene win_screen;
 
-	public Board(Pane pane){
+	public Board(Pane pane, Stage primaryStage, Scene start_screen){
 		setupCapturedPieces(pane); // Setup the captured pieces
 		red_turn = createImageView("/Images/red_turn.png", false);
 		black_turn = createImageView("/Images/black_turn.png", false);
@@ -94,7 +98,7 @@ public class Board{
 								}
 
 		  						if(valid_point){
-		  							Piece target_piece;
+		  							Piece target_piece = null;
 									if(s_pane.getChildren().size() > 1 
 										&& s_pane.getChildren().get(1) instanceof ImageView){
 										target_piece = dataBoard[piece_oneY][piece_oneX];
@@ -110,6 +114,28 @@ public class Board{
 										}
 									}
 
+									if(target_piece instanceof General){
+										ImageView background = createImageView("/Images/chinese_chess_back.jpg", true);
+										ImageView winner;
+										if(turn == 'R'){
+											winner = createImageView("/Images/RedWinner.png");
+										}
+										else{
+											winner = createImageView("/Images/BlackWinner.png");
+										}
+										Button play_again = createButton("/Images/PlayAgain.png");
+										play_again.setOnMouseClicked(f->{
+											primaryStage.setScene(start_screen);
+										});
+										Pane pane = new Pane();
+										pane.getChildren().addAll(background, winner, play_again);
+										winner.relocate(310 * RATIO, 280 * RATIO);
+										play_again.relocate(670 * RATIO, 580 * RATIO);
+										Scene win_screen = new Scene(pane);
+										win_screen.getStylesheets().add("/css/start_menu.css");
+										primaryStage.setScene(win_screen);
+										win = true;
+									}
 									target_piece = dataBoard[piece_oneY][piece_oneX];
 									old_piece.setPaneXY(piece_oneX, piece_oneY);
 									dataBoard[piece_oneY][piece_oneX] = old_piece;
@@ -149,7 +175,6 @@ public class Board{
 									for(int i = 0; i < validPoints.size(); i++){
 										int rectX = (int)(validPoints.get(i).getX());
 										int rectY = (int)(validPoints.get(i).getY());
-										System.out.println("Painting column " + rectX + " row " + rectY);
 										// Rectangle is always the first node
 										((Rectangle)(board[rectY][rectX].getChildren().get(0))).setFill(Color.rgb(12, 128, 34, 0.4)); 
 									}
@@ -209,6 +234,16 @@ public class Board{
 		System.out.println(ret);
 	}
 
+	public ImageView createImageView(String image_location){
+		Image image = new Image(image_location);
+		ImageView image_view = new ImageView(image);
+		image_view.setFitWidth(image.getWidth() * RATIO);
+		image_view.setPreserveRatio(true);
+		image_view.setSmooth(true);
+		image_view.setCache(true);
+		return image_view;
+	}
+
 	public ImageView createImageView(String image_location, boolean background){
 		Image image = new Image(image_location);
 		ImageView image_view = new ImageView(image);
@@ -224,8 +259,16 @@ public class Board{
 		return image_view;
 	}
 
+	public Button createButton(String image_location){
+		return new Button("", createImageView(image_location, false)); 
+	}
+
 	public void setupCapturedPieces(Pane pane){
 		captured_red_side = new Captured('R', pane, true); // Setup captured red pieces
 		captured_black_side = new Captured('B', pane, true); // Setup captured black pieces
+	}
+
+	public boolean getWin(){
+		return win;
 	}
 }

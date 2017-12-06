@@ -86,10 +86,44 @@ public class Behavior{
 
 		if(piece instanceof Elephant){
 			if(piece.getSide() == 'R'){
-			
+				if(y + 2  <= 9){ // Down
+					if(x + 2 <= 8 && noPiece(x + 1, y + 1, dataBoard)){ // Bottom right
+							addToList(x + 2, y + 2, piece, dataBoard, ret);
+					}
+					if(x - 2 >= 0 && noPiece(x - 1, y + 1, dataBoard)){ // Bottom left
+							addToList(x - 2, y + 2, piece, dataBoard, ret);
+					}
+
+				}
+				if(y - 2 >= 5){ // Up
+					if(x + 2 <= 8 && noPiece(x + 1, y - 1, dataBoard)){ // Upper right
+							addToList(x + 2, y - 2, piece, dataBoard, ret);
+					}
+					if(x - 2 >= 0 && noPiece(x - 1, y - 1, dataBoard)){ // Upper left
+							addToList(x - 2, y - 2, piece, dataBoard, ret);
+					}
+				}
+				return ret;
 			}
 			else{
-				
+				if(y + 2  <= 4){ // Down
+					if(x + 2 <= 8 && noPiece(x + 1, y + 1, dataBoard)){ // Bottom right
+							addToList(x + 2, y + 2, piece, dataBoard, ret);
+					}
+					if(x - 2 >= 0 && noPiece(x - 1, y + 1, dataBoard)){ // Bottom left
+							addToList(x - 2, y + 2, piece, dataBoard, ret);
+					}
+
+				}
+				if(y - 2 >= 0){ // Up
+					if(x + 2 <= 8 && noPiece(x + 1, y - 1, dataBoard)){ // Upper right
+							addToList(x + 2, y - 2, piece, dataBoard, ret);
+					}
+					if(x - 2 >= 0 && noPiece(x - 1, y - 1, dataBoard)){ // Upper left
+							addToList(x - 2, y - 2, piece, dataBoard, ret);
+					}
+				}
+				return ret;
 			}
 		}
 
@@ -148,27 +182,174 @@ public class Behavior{
 					addToList(x, y + 1, piece, dataBoard, ret);
 				}
 			}
+
+			boolean flyingGeneral = false;
+			int x2 = x + 1;
+			while(x2 <= 8){
+				if(!noPiece(x2, y, dataBoard)){
+					if(dataBoard[y][x2] instanceof General){
+						addToList(x2, y, piece, dataBoard, ret);
+						flyingGeneral = true;
+					}
+					break;
+				}
+				x2++;
+			}
+			if(!flyingGeneral){
+				x2 = x - 1;
+				while(x2 >= 0){
+					if(!noPiece(x2, y, dataBoard)){
+						if(dataBoard[y][x2] instanceof General){
+							addToList(x2, y, piece, dataBoard, ret);
+							flyingGeneral = true;
+						}
+						break;
+					}
+					x2--;
+				}
+			}
+			int y2 = y + 1;
+			if(!flyingGeneral){
+				while(y2 <= 9){
+					if(!noPiece(x, y2, dataBoard)){
+						if(dataBoard[y2][x] instanceof General){
+							addToList(x, y2, piece, dataBoard, ret);
+							flyingGeneral = true;
+						}
+						break;
+					}
+					y2++;
+				}
+			}
+			if(!flyingGeneral){
+				y2 = y - 1;
+				while(y2 >= 0){
+					if(!noPiece(x, y2, dataBoard)){
+						if(dataBoard[y2][x] instanceof General){
+							addToList(x, y2, piece, dataBoard, ret);
+						}
+						break;
+					}
+					y2--;
+				}
+			}
 			return ret;
 		}
 
 		if(piece instanceof Cannon){
-			if(piece.getSide() == 'R'){
-			
+			int x2 = x + 1 ;
+			while(x2 <= 8){
+				if(noPiece(x2, y, dataBoard)){
+					addToList(x2, y, piece, dataBoard, ret);
+				}
+				else{
+					x2++;
+					break;
+				}
+				x2++;
 			}
-			else{
-				
+			while(x2 <= 8){
+				if(!noPiece(x2, y, dataBoard)){
+					addToList(x2, y, piece, dataBoard, ret);
+					break;
+				}
+				x2++;
 			}
+
+			x2 = x - 1;
+			while(x2 >= 0){
+				if(noPiece(x2, y, dataBoard)){
+					addToList(x2, y, piece, dataBoard, ret);
+				}
+				else{
+					x2--;
+					break;
+				}
+				x2--;
+			}
+			while(x2 >= 0){
+				if(!noPiece(x2, y, dataBoard)){
+					addToList(x2, y, piece, dataBoard, ret);
+					break;
+				}
+				x2--;
+			}
+
+			int y2 = y + 1;
+			while(y2 <= 9){
+				if(noPiece(x, y2, dataBoard)){
+					addToList(x, y2, piece, dataBoard, ret);
+				}
+				else{
+					y2++;
+					break;
+				}
+				y2++;
+			}
+			while(y2 <= 9){
+				if(!noPiece(x, y2, dataBoard)){
+					addToList(x, y2, piece, dataBoard, ret);
+					break;
+				}
+				y2++;
+			}
+
+			y2 = y - 1;
+			while(y2 >= 0){
+				if(noPiece(x, y2, dataBoard)){
+					addToList(x, y2, piece, dataBoard, ret);
+				}
+				else{
+					y2--;
+					break;
+				}
+				y2--;
+			}
+			while(y2 >= 0){
+				if(!noPiece(x, y2, dataBoard)){
+					addToList(x, y2, piece, dataBoard, ret);
+					break;
+				}
+				y2--;
+			}
+			return ret;
 		}
 
 		if(piece instanceof Chariot){
-			if(piece.getSide() == 'R'){
-			
+			int x2 = x + 1;
+			while(x2 <= 8){
+				addToList(x2, y, piece, dataBoard, ret);
+				if(!noPiece(x2, y, dataBoard)){
+					break;
+				}
+				x2++;
 			}
-			else{
-				
+			x2 = x - 1;
+			while(x2 >= 0){
+				addToList(x2, y, piece, dataBoard, ret);
+				if(!noPiece(x2, y, dataBoard)){
+					break;
+				}
+				x2--;
 			}
+			int y2 = y + 1;
+			while(y2 + 1 <= 9){
+				addToList(x, y2 + 1, piece, dataBoard, ret);
+				if(!noPiece(x, y2 + 1, dataBoard)){
+					break;
+				}
+				y2++;
+			}
+			y2 = y - 1;
+			while(y2 >= 0){
+				addToList(x, y2, piece, dataBoard, ret);
+				if(!noPiece(x, y2, dataBoard)){
+					break;
+				}
+				y2--;
+			}
+			return ret;
 		}
-
 		return null;
 	}
 

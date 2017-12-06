@@ -16,6 +16,8 @@ public class Side{
 		StackPane[][] board = board1.getSPArr();
 		Piece[][] data_board = board1.getPArr();
 		if(side == 'R'){ // Red side
+			System.out.println(board1);
+			System.out.println(board);
 			left_chariot = new Chariot(0, 0, 1, side, board[9][0]);
 			left_horse = new Horse(0, 0, 1, side, board[9][1]);
 			left_elephant = new Elephant(0, 0, 1, side, board[9][2]);
