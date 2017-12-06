@@ -23,7 +23,6 @@ import java.util.LinkedList;
 public class StartScreen extends Application{
 	final double RATIO = 0.6;
 	Scene game_screen = null, start_screen = null;
-	ImageView red_turn, black_turn, player_turn;
 	Cannon cannon;
 
 	public void start(Stage primaryStage){
@@ -72,9 +71,7 @@ public class StartScreen extends Application{
 
 	public void setupGameScreen(Stage primaryStage){
 		ImageView background = createImageView("/Images/board.png", true);
-		red_turn = createImageView("/Images/red_turn.png", false);
-		black_turn = createImageView("/Images/black_turn.png", false);
-		player_turn = red_turn;
+		
 		ImageView captured_pieces = createImageView("/Images/captured_pieces.png", false);
 
 		Button save_button = createButton("/Images/save.png");
@@ -87,22 +84,13 @@ public class StartScreen extends Application{
 		});
 		
 		Pane pane = new Pane();
-		pane.getChildren().addAll(background, save_button, quit_button, player_turn, captured_pieces);
+		pane.getChildren().addAll(background, save_button, quit_button, captured_pieces);
 		save_button.relocate(1030 * RATIO, 850 * RATIO);
 		quit_button.relocate(1410 * RATIO, 850 * RATIO);
-		player_turn.relocate(990 * RATIO, 30 * RATIO);
 		captured_pieces.relocate(990 * RATIO, 240 * RATIO);
 		Board board = new Board(pane);
-		setupPieces(pane);
 		game_screen = new Scene(pane);
 		game_screen.getStylesheets().add("/css/start_menu.css");
-	}
-
-	public void setupPieces(Pane pane){
-		Side black_side = new Side('B', pane, false); // Setup black board pieces
-		Side red_side = new Side('R', pane, false); // Setup red board pieces
-		Side captured_red_side = new Side('R', pane, true); // Setup captured red pieces
-		Side captured_black_side = new Side('B', pane, true); // Setup captured black pieces
 	}
 
 	//===============================Helper Functions=======================================

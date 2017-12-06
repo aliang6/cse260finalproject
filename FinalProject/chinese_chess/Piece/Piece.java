@@ -11,9 +11,10 @@ import javafx.scene.shape.Rectangle;
 import java.lang.Math;
 
 public class Piece{
-	//ArrayList<Behavior> behaviors;
 	double x;
 	double y;
+	int pane_x;
+	int pane_y;
 	double alpha;
 	char side; // "R" or "B"
 	Pane pane;
@@ -28,7 +29,6 @@ public class Piece{
 		this.alpha = alpha;
 		this.side = side;
 		this.pane = pane;
-		//behaviors = new ArrayList<Behavior>();
 	}
 
 	// Accessors
@@ -38,12 +38,18 @@ public class Piece{
 	public double getY(){
 		return y;
 	}
+	public int getPaneX(){
+		return pane_x;
+	}
+	public int getPaneY(){
+		return pane_y;
+	}
+	public Pane getPane(){
+		return pane;
+	}
 	public double getAlpha(){
 		return alpha;
 	}
-	/*public ArrayList<Behavior> getBehavior(){
-		return behaviors;
-	}*/
 	public ImageView getImageView(){
 		return image_view;
 	}
@@ -52,19 +58,14 @@ public class Piece{
 	}
 
 	// Modifiers
-	public void setX(double x){
-		this.x = x;
-	}
-	public void setY(double y){
-		this.y = y;
+	public void setPaneXY(int x, int y){
+		this.pane_x = x;
+		this.pane_y = y;
 	}
 	public void setAlpha(double alpha){
 		this.alpha = alpha;
 		image_view.setOpacity(alpha);
 	}
-	/*public void addBehavior(Behavior newBehavior){
-		behaviors.add(newBehavior);
-	}*/
 
 	// Helper Functions
 	public ImageView createImageView(String image_location){
@@ -77,13 +78,24 @@ public class Piece{
 		return image_view;
 	}
 
+	public void setupImageView(){
+		image_view.setOpacity(alpha);
+		image_view.setMouseTransparent(true);
+		pane.getChildren().add(this.image_view);
+		image_view.relocate(x * RATIO, y * RATIO);
+	}
+
+	public void updateImageView(){
+		pane.getChildren().remove(this.image_view);
+		image_view.setOpacity(1.0);
+		pane.getChildren().add(this.image_view);
+	}
+
 	public void addDragAndDrop(){
 		image_view.setOnMousePressed(new EventHandler<MouseEvent>() {
 		  public void handle(MouseEvent e) {
 		    org_sceneX = e.getSceneX();
 			org_sceneY = e.getSceneY();
-			//org_transformX = image_view.getLayoutX();
-			//org_transformX = image_view.getLayoutY();
 			org_translateX = ((ImageView)(e.getSource())).getTranslateX();
 			org_translateY = ((ImageView)(e.getSource())).getTranslateY();
 		  }
@@ -109,4 +121,8 @@ public class Piece{
 		});
 	}
 
+	// Override toString
+	public String toString(){
+		return "";
+	}
 }

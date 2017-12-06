@@ -9,8 +9,10 @@ public class General extends Piece{
 		else{
 			image_view = createImageView("/Images/Pieces/black_general.png");
 		}
-		image_view.setOpacity(alpha);
-		pane.getChildren().add(this.image_view);
-		image_view.relocate(x * RATIO, y * RATIO);
+		setupImageView();
+	}
+
+	public String toString(){
+		return "Ge";
 	}
 }
